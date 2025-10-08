@@ -14,12 +14,7 @@ export default function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState<Movie>();
-
-  const openModal = () => setIsModalOpen(true);
-
-  const closeModal = () => setIsModalOpen(false);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
   const handleSearchBar = async (data: string) => {
     try {
@@ -49,13 +44,16 @@ export default function App() {
       {movies.length > 0 && (
         <MovieGrid
           movies={movies}
-          onSelect={(movie) => {
-            setSelectedMovie(movie);
-            openModal();
-          }}
+          onSelect={(movie) => setSelectedMovie(movie)}
         />
       )}
-      {isModalOpen && <MovieModal onClose={closeModal} movie={selectedMovie} />}
+
+      {selectedMovie && (
+        <MovieModal
+          onClose={() => setSelectedMovie(null)}
+          movie={selectedMovie}
+        />
+      )}
     </>
   );
 }
